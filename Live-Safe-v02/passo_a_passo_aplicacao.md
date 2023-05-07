@@ -189,12 +189,86 @@ AspNet Core recurso: Identity (forma simplificada)
 
 *Da pra fazer muita coisa aqui, como conectar via Google etc, mas só tem o básico nesse walkthrough*
 
-Models> Nova Classe `Usuario.cs`
+`Models` > _Nova Classe_ `Usuario.cs`
 
 ```csharp
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Live_Safe_v02.Models {
+    [Table("Usuarios")]
+    public class Usuarios {
+
+        [System.ComponentModel.DataAnnotations.Key]
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public string Email { get; set; }
+        public string Senha { get; set; }
+
+        public  Perfil Perfil { get; set; }
+    }
+
+    public enum Perfil {
+        Administrador,
+        Usuario
+    }
+}
+```
+## Configurando o Contexto de Dados do Usuário
+
+`Models` > Clicar `ApplicationDbContext.cs` depois de `Expostos`
 
 ```csharp
-[Table("Usuarios")]
+    public DbSet<Usuarios> Usuarios { get; set; }
+```
 
+## Gerando o Banco de Dados do Usuário
+*NOTA*: **Pare** a aplicação antes de disso:
+```
+    PM> Add-Migration M01 (visto q pulei a M00 q seria consumo do veículo)
+    PM> Update-Database
+```	
+>Pode conferir no `SQL Server Object Explorer` se o banco de dados foi criado e se a tabela `Usuarios` foi criada com as colunas `Id`, `Nome`, `Email`, `Senha` e `Perfil`. Se quiser! Se não, fF*oda-se. Já são 6:10 da manhã e eu to acordado desde as 7:00 de ontem. Vou dormir. Boa noite. #sqn* :´-(
 
+**Vamos lá!**
+## Criando o Controller Usuário
+
+```
+    Controller>Adicionar>Controlador MVC com exibições, usando o Entity Framework (CRUD completo)
+
+    Classe do modelo: Usuarios (Live_Safe_v02.Models)
+
+    Contexto de dados do aplicativo: ApplicationDbContext (Live_Safe_v02.Models)
+
+    Nome: UsuariosController (colocar em português)
+
+    > Executar aplicação <
+```
+https:// localhost: < PORTA >/Usuarios
+
+Se der certo, significa que não deu errado. Parabnéns! Você é um programador de verdade! :D
+
+## Criando a View de Cadastro de Usuário
+
+`Views>Shared>_Layout.cshtml`
+
+- Colocar nova opção usuário na lista do menú de acesso à dados
+
+```html
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuario</a>
+    </li>
+```
+- Habilitar a opção de usuário na lista de tipo em `Views>Usuarios>Create.cshtml`
+*procurar pelo único `<select>` da página está no final
+Isso serve para criar um usuário com perfil de administrador ou usuário comum*
+e repetir 
+
+        asp-items="Html.GetEnumSelectList<Perfil>()"
+
+em `Views>Usuarios>Edit.cshtml`
+
+```html
+<select asp-for="Perfil" class="form-control" asp-items="Html.GetEnumSelectList<Perfil>()"></select>
+```
 
