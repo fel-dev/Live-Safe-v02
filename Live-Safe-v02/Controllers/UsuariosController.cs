@@ -57,6 +57,9 @@ namespace Live_Safe_v02.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Antes de salvar a senha no banco de dados, criptografar a senha
+                usuarios.Senha = BCrypt.Net.BCrypt.HashPassword(usuarios.Senha);
+                // Salvar a senha criptografada no banco de dados
                 _context.Add(usuarios);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,6 +99,9 @@ namespace Live_Safe_v02.Controllers
             {
                 try
                 {
+                    // Antes de salvar a senha no banco de dados, criptografar a senha
+                    usuarios.Senha = BCrypt.Net.BCrypt.HashPassword(usuarios.Senha);
+                    // Salvar a senha criptografada no banco de dados
                     _context.Update(usuarios);
                     await _context.SaveChangesAsync();
                 }

@@ -262,7 +262,7 @@ Se der certo, significa que não deu errado. Parabnéns! Você é um programador
 - Habilitar a opção de usuário na lista de tipo em `Views>Usuarios>Create.cshtml`
 *procurar pelo único `<select>` da página está no final
 Isso serve para criar um usuário com perfil de administrador ou usuário comum*
-e repetir 
+e repetir: 
 
         asp-items="Html.GetEnumSelectList<Perfil>()"
 
@@ -272,3 +272,103 @@ em `Views>Usuarios>Edit.cshtml`
 <select asp-for="Perfil" class="form-control" asp-items="Html.GetEnumSelectList<Perfil>()"></select>
 ```
 
+## Configurando a Cripitografia da Senha
+
+- `Models>Usuario.cs` colocar anotação `[DataType(DataType.Password)]` na propriedade `Senha`
+
+```csharp
+    [DataType(DataType.Password)]
+    public string Senha { get; set; }
+```
+- Precisa atualizar o Db? Não sei. Vou fazer isso mesmo assim.
+
+```
+    PM> Add-Migration M02
+    PM> Update-Database
+```
+
+- Armarzenar a senha no banco de dados ( e criptografar usando o Hash)
+  - baixar no `Gerenciador de Pacotes Nuget Para Solução`: (**fechar** aplicação antes disso) -- *Baixar* `BCrypt.Net-Next`
+
+
+## Alterando a criptografia da senha
+
+Controllers>UsuariosController.cs e achar onde pega a senha (q é no Create)
+
+`usuarios.Senha = BCrypt.Net.BCrypt.HashPassword(usuarios.Senha);`
+
+Tipo assim q fik:
+
+```csharp
+        // POST: Usuarios/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Nome,Email,Senha,Perfil")] Usuarios usuarios)
+        {
+            if (ModelState.IsValid)
+            {
+                // Antes de salvar a senha no banco de dados, criptografar a senha
+                usuarios.Senha = BCrypt.Net.BCrypt.HashPassword(usuarios.Senha);
+                // Salvar a senha criptografada no banco de dados
+                _context.Add(usuarios);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(usuarios);
+        }
+```
+
+- Repetir isso tb no edit
+    
+    ```csharp
+            // POST: Usuarios/Edit/5
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Email,Senha,Perfil")] Usuarios usuarios)
+            {
+                if (id != usuarios.Id)
+                {
+                    return NotFound();
+                }
+    
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        // Antes de salvar a senha no banco de dados, criptografar a senha
+                        usuarios.Senha = BCrypt.Net.BCrypt.HashPassword(usuarios.Senha);
+                        // Salvar a senha criptografada no banco de dados
+                        _context.Update(usuarios);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!UsuariosExists(usuarios.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(usuarios);
+            }
+    ```
+
+    ## Remover a exibição da senha(hash) na lista de usuários
+
+    - Remover tanto em `Details` quanto no `Index`
+
+        `Views>Usuarios>Details.cshtml`
+
+    ```html
+    <dt>
+        @Html.DisplayNameFor(model => model.Senha)
+    </dt>
