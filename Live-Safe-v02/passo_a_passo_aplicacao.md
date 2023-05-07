@@ -368,7 +368,27 @@ Tipo assim q fik:
 
         `Views>Usuarios>Details.cshtml`
 
-    ```html
-    <dt>
-        @Html.DisplayNameFor(model => model.Senha)
-    </dt>
+```html
+<dt>
+    ~@Html.DisplayNameFor(model => model.Senha)~
+    ********
+</dt>
+```
+
+## Criando a View de Login e Logout do Usuário
+
+`Controllers>UsuariosControllers.cs`
+
+public IActionResult Login()
+
+```csharp
+        public IActionResult Login() {
+            return View();
+        }
+```
+
+- **BDM** em `Login()` > add exibição view do Razor;
+  - modelo: Create
+  - modelo de dados: Usuarios(Live_Safe_v02.Models)
+  - Click em `Adicionar`
+  - > Executar aplicação <
