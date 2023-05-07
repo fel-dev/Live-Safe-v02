@@ -44,6 +44,14 @@
     <a asp-action="Create">Não tem uma conta?</a>
 </div>
 
+<div class="row">
+    
+    <h3 class="alert-info">@ViewBag.Message</h3>
+    
+    <h3 class="alert-danger">@ViewBag.Error</h3>
+    
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -25,6 +25,26 @@ namespace Live_Safe_v02.Controllers
             return View();
         }
 
+        // POST: Login
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous] // <--- Anotação para liberar o acesso sem login
+        public async Task<IActionResult> Login([Bind("Email, Senha")] Usuarios usuario) {
+            var user = await _context.Usuarios
+                .FirstOrDefaultAsync(m => m.Email == usuario.Email);
+            if (user == null) {
+                ViewBag.Error = "Usuário ou senha não encontrado!";
+                return View();
+            }
+            bool senhaValida = BCrypt.Net.BCrypt.Verify(usuario.Senha, user.Senha);
+            if (senhaValida) {
+                ViewBag.Message = "Autenticado!";
+                return View();
+            }
+            ViewBag.Error  = "Usuário ou senha não encontrado!";
+            return View();
+        }
+
 
         // GET: Usuarios
         public async Task<IActionResult> Index()
