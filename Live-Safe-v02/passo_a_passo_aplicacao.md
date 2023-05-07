@@ -370,25 +370,48 @@ Tipo assim q fik:
 
 ```html
 <dt>
-    ~@Html.DisplayNameFor(model => model.Senha)~
+    ~~@Html.DisplayNameFor(model => model.Senha)~~
     ********
 </dt>
 ```
 
-## Criando a View de Login e Logout do Usuário
+## Criando a View de Login e Logout do Usuário pt1
 
 `Controllers>UsuariosControllers.cs`
 
 public IActionResult Login()
 
 ```csharp
+        [AllowAnonymous] // <--- Anotação para liberar o acesso sem login
         public IActionResult Login() {
             return View();
         }
 ```
-
+- Parar aplicação.
 - **BDM** em `Login()` > add exibição view do Razor;
+  - nome: Login 
   - modelo: Create
-  - modelo de dados: Usuarios(Live_Safe_v02.Models)
+  - classe do modelo: Usuarios(Live_Safe_v02.Models)
   - Click em `Adicionar`
-  - > Executar aplicação <
+
+## Criando a View de Login e Logout do Usuário pt2
+- Executar aplicação
+ - Adicionar link para login no menu de navegação
+    - `Views>Shared>_Layout.cshtml`
+    - _tipo_ assim:
+
+```html
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Login">Sign In</a>
+        </li>
+    </ul>
+</div>
+</div>
+</nav>
+```
+- Em: `Views>Usuarios>Login.cshtml` remover o campo `Nome` e `Perfil` e deixar apenas `Email` e `Senha`.
+
+- o botão de `Criar` mudar para `Entrar`
+- o botão de `Voltar` mudar para `Você já tem uma conta?` e apontar para `Login`
+    - pode querer fazer algo parecido em `Create`. Fica a seu critério.
+    

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Live_Safe_v02.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Live_Safe_v02.Controllers
 {
@@ -17,6 +18,13 @@ namespace Live_Safe_v02.Controllers
         {
             _context = context;
         }
+
+        // GET: Login
+        [AllowAnonymous] // <--- Anotação para liberar o acesso sem login
+        public IActionResult Login() {
+            return View();
+        }
+
 
         // GET: Usuarios
         public async Task<IActionResult> Index()
