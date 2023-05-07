@@ -66,7 +66,9 @@ namespace Live_Safe_v02.Models {
 }
 ```
 
-# Fim da configuração do Entity Framework
+## Fim da configuração do Entity Framework
+
+---
 
 ## Configurar o Startup.cs
 para que o Entity Framework possa ser utilizado
@@ -120,5 +122,78 @@ Dar os comando de migração e atualização do banco de dados:
 Utilizar geração de código automático do Framework para criar o Controller e as Views
 
 ```
-    Controller>Adicionar>Controlador MVC com exibições, usando o Entity Framework (irá criar tanto o controlador quanto a veiw, que utiliza bootstrap)
+    Controller>Adicionar>Controlador MVC com exibições, usando o Entity Framework (Com isso, icriará tanto o controlador quanto a view, que utiliza bootstrap)
+
+    Classe Expostos
+
+    Contexto de dados do aplicativo ApplicationDbContext
+    Nome do controlador "ExpostosController" (colocar em português)
+
+    Com isso, criará todas as opções de CRUD + View
 ```
+
+## 10 - Analisando as Views do Controller Expostos
+
+## _Master Page_
+
+_pode ser feito com a aplicação rodando_
+
+`Views>Shared>_Layout.cshtml`
+
+>Substituir `Privacy` para: `Expostos`
+
+```html
+@* Talvez isso não faça sentido exibir, mas depois eu vejo.. zZzZ...*@
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Expostos" asp-action="Index">Expostos</a>
+    </li>
+```
+_As views podem ser alteradas enquanto está rodando a aplicação, mas quando for mexer em `código`, vai precisa reiniciar pra surgir efeito na `lógica`_
+
+--- 
+## Pulando...
+### OBS: Pulando algumas partes, **mas não deixe de ler** ☺
+
+> **A parte de cadastramento de `Consumo do veículo` vou pular. É a mesma coisa que foi feita com `Expostos` e `Consumo do veículo` não é o foco do projeto.**
+
+**Obs:** Ordenar uma lista de forma decrescente (Data) no foreach (vou pular ess parte também, só pra saber, se quiser colocar e não tiver ideia de como fazer)
+
+```html
+@foreach (var item in Model.OrderByDescending(x => x.Data)) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Origem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Data)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+        </td>
+    </tr>
+}
+```
+
+## Fim do pulo
+
+# Segurança da Aplicação
+## Controle de Usuário
+### Criando Model Usuário
+
+AspNet Core recurso: Identity (forma simplificada)
+
+*Da pra fazer muita coisa aqui, como conectar via Google etc, mas só tem o básico nesse walkthrough*
+
+Models> Nova Classe `Usuario.cs`
+
+```csharp
+
+```csharp
+[Table("Usuarios")]
+
+
