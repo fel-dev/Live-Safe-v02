@@ -1,4 +1,5 @@
 using Live_Safe_v02.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,19 @@ namespace Live_Safe_v02 {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
 
+            // Configurar o cookie PolicyOptions
+            services.Configure<CookiePolicyOptions>(options => {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+            });
+
+            // Configurar o cookie Authentication
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => {
+                    //options.AccessDeniedPath = "/Usuarios/AccessDenied";
+                    options.LoginPath = "/Usuarios/Login";
+                });
+
             services.AddControllersWithViews();
         }
 
@@ -42,6 +56,10 @@ namespace Live_Safe_v02 {
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCookiePolicy();
+
+            app.UseAuthentication(); // <--- Adicionar o cookie Authentication, ANTES do UseAuthorization!
 
             app.UseAuthorization();
 

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Live_Safe_v02.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Live_Safe_v02.Controllers
 {
@@ -38,8 +40,30 @@ namespace Live_Safe_v02.Controllers
             }
             bool senhaValida = BCrypt.Net.BCrypt.Verify(usuario.Senha, user.Senha);
             if (senhaValida) {
+                // Salvar o usuário na sessão
+                var claim = new List<Claim> {
+                    new Claim(ClaimTypes.Name, user.Nome),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Perfil.ToString())
+                };
+
+                // Criar a validação desses claims
+                var identity = new ClaimsIdentity(claim, "Login");
+                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                
+                // Configurar o tempo de expiração do cookie
+                var props = new AuthenticationProperties {
+                    AllowRefresh = true,
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(30)
+                };
+                
+                // Criar a sessão
+                await HttpContext.SignInAsync(principal, props);
+
                 ViewBag.Message = "Autenticado!";
-                return View();
+
+                return Redirect("/");
             }
             ViewBag.Error  = "Usuário ou senha não encontrado!";
             return View();

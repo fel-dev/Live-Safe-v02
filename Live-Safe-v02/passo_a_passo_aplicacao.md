@@ -420,7 +420,7 @@ public IActionResult Login()
 
 # Unidade 2 - Segurança
 #### ASP.NET CORE Identity
-## Configurando o Identity
+## Configurando da lógica do Identity
 Implementação necessária para o Identity funcionar
 
 copiar o public IActionResult Login() do `UsuariosController.cs` e colar abaixo dele mesmo, mas com uma anotação `[HttpPost]` e passando esses parametros Email, Senha.
@@ -458,3 +458,97 @@ copiar o public IActionResult Login() do `UsuariosController.cs` e colar abaixo 
         </div>
     </div>
 ```
+
+## Configuração do Identity em si
+
+- Se a senha estiver correta, precisa criar uma sessão para o usuário. Para isso, precisamos configurar o Identity.
+
+```csharp
+if (senhaCorreta) {
+    // Cria a credencial que ficará no cashe da aplicação
+    // https://docs.microsoft.com/pt-br/aspnet/core/security/authentication/identity?view=aspnetcore-5.0&tabs=visual-studio
+    var claims = new List<Claim> {
+        new Claim(ClaimTypes.Name, user.Nome),
+        new Claim(ClaimTypes.NameIdentifier, user.Nome),
+        new Claim(ClaimTypes.Role, user.perfil.ToString())
+    };
+
+    // Criar a validação desses dados
+    var userIdentity = new ClaimsIdentity(claims, "login");
+
+    ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
+
+    // Configurando o tempo de expiração do cookie
+    var props = new AuthenticationProperties {
+        AllowRefresh = true,
+        ExpiresUtc = DateTime.UtcNow.AddMinutes(30),
+        IsPersistent = false
+    };
+
+    // Inclusão do usuário na sessão da aplicação
+    await HttpContext.SignInAsync(principal, props);
+
+    return Redirect("/"); // Se der tudo ok, var redirecionar paro Home, desta vez autenticado.
+
+    //ViewBag.Message = "Usuário encontrado!";
+    //return View();
+}
+
+ViewBag.Message = "Usuário e/ou Senha não encontrado!";
+return View();
+}
+
+// Acesso negado
+[AllowAnonymous] // <--- Anotação para liberar o acesso sem login
+public IActionResult AccessDenied() {
+return View();
+}
+```
+
+- para mostrar o nome do usuário logado, precisamos alterar o `Views>Shared>_Layout.cshtml` e adicionar o seguinte código antes da lista:
+
+```html
+<ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+
+    @if (User.Identity.IsAuthenticated) 
+    {
+
+    @*Só enxerga se o usuário estiver logado*@
+
+    @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Lista de Usuários</a>
+            </li>
+        }
+    }                   
+</ul>
+<ul class="navbar-nav">
+    
+    @*Verifica se o usuário está logado na aplicação*@
+    @if (User.Identity.IsAuthenticated) 
+    {
+        @* Vai aprensentar o nome do usuário *@
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Logout">Olá, @User.Identity.Name!</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Logout">Logout</a>
+        </li>
+
+    } 
+    else 
+    {
+        @* Vai apresentar o link para o usuário logar *@
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Login">Login</a>
+        </li>
+    }                        
+</ul>
+```
+
+Precisa fazer alteração no `Startup.cs` para que o Identity funcione
+
+```csharp
+public
