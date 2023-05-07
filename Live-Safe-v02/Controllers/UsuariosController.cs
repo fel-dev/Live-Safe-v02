@@ -69,6 +69,17 @@ namespace Live_Safe_v02.Controllers
             return View();
         }
 
+        // Acesso negado
+        [AllowAnonymous] // <--- Anotação para liberar o acesso sem login
+        public IActionResult AccessDenied() {
+            return View();
+        }
+
+        // Logout redirecionando pro login
+        public async Task<IActionResult> Logout() {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "Usuarios");
+        }
 
         // GET: Usuarios
         public async Task<IActionResult> Index()

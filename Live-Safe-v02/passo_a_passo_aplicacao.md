@@ -551,4 +551,53 @@ return View();
 Precisa fazer alteração no `Startup.cs` para que o Identity funcione
 
 ```csharp
-public
+public void ConfigureServices(IServiceCollection services) {
+    
+    services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+    );
+
+    // para fazer configuração de senha direto do site da MS mesmo.
+    // https://docs.microsoft.com/pt-br/aspnet/core/security/gdpr?view=aspnetcore-5.0
+    services.Configure<CookiePolicyOptions>(options => {
+        // This lambda determines whether user consent for non-essential cookies is needed for a given request.                
+        options.CheckConsentNeeded = context => true;
+        options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+    });
+
+    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options => {
+            options.AccessDeniedPath = "/Usuarios/AccessDenied";
+            options.LoginPath = "/Usuarios/Login";                    
+    });
+
+    services.AddControllersWithViews();
+}
+
+```
+
+essa ordem é importante tbm fica em ´startup.cs´
+
+```csharp
+    app.UseCookiePolicy();
+    app.UseAuthentication();
+    app.UseAuthorization();
+```
+
+- com isso, falta criar a página de acesso negado e a de logout do usuário. Vamos lá!
+Criar o código abaixo em `Controllers>UsuariosController.cs`
+- Clicar BDM em `AccessDenied` e `Logout` e criar a view do Razor (só add, sem configurar nada).
+
+```csharp
+        // Acesso negado
+        [AllowAnonymous] // <--- Anotação para liberar o acesso sem login
+        public IActionResult AccessDenied() {
+            return View();
+        }
+
+        // Logout redirecionando pro login
+        public async Task<IActionResult> Logout() {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "Usuarios");
+        }
+```

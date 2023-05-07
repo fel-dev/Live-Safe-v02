@@ -36,7 +36,7 @@ namespace Live_Safe_v02 {
             // Configurar o cookie Authentication
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => {
-                    //options.AccessDeniedPath = "/Usuarios/AccessDenied";
+                    options.AccessDeniedPath = "/Usuarios/AccessDenied";
                     options.LoginPath = "/Usuarios/Login";
                 });
 
