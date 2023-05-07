@@ -259,6 +259,7 @@ Se der certo, significa que não deu errado. Parabnéns! Você é um programador
         <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuario</a>
     </li>
 ```
+
 - Habilitar a opção de usuário na lista de tipo em `Views>Usuarios>Create.cshtml`
 *procurar pelo único `<select>` da página está no final
 Isso serve para criar um usuário com perfil de administrador ou usuário comum*
@@ -280,6 +281,7 @@ em `Views>Usuarios>Edit.cshtml`
     [DataType(DataType.Password)]
     public string Senha { get; set; }
 ```
+
 - Precisa atualizar o Db? Não sei. Vou fazer isso mesmo assim.
 
 ```
@@ -409,9 +411,50 @@ public IActionResult Login()
 </div>
 </nav>
 ```
+
 - Em: `Views>Usuarios>Login.cshtml` remover o campo `Nome` e `Perfil` e deixar apenas `Email` e `Senha`.
 
 - o botão de `Criar` mudar para `Entrar`
 - o botão de `Voltar` mudar para `Você já tem uma conta?` e apontar para `Login`
     - pode querer fazer algo parecido em `Create`. Fica a seu critério.
-    
+
+# Unidade 2 - Segurança
+#### ASP.NET CORE Identity
+## Configurando o Identity
+Implementação necessária para o Identity funcionar
+
+copiar o public IActionResult Login() do `UsuariosController.cs` e colar abaixo dele mesmo, mas com uma anotação `[HttpPost]` e passando esses parametros Email, Senha.
+
+```csharp
+        [AllowAnonymous] // <--- Anotação para liberar o acesso sem login
+        public IActionResult Login() {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous] // <--- Anotação para liberar o acesso sem login
+        public async Task<IActionResult> Login([Bind("Email,Senha")] Usuarios usuario) {
+            var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.Email == usuario.Email);
+            if (usuario == null) {
+                ViewBag.Erro = "Usuário não encontrado";
+                return View();
+            }
+            bool senhaCorreta = BCrypt.Net.BCrypt.Verify(usuario.Senha, usuario.Senha);
+            if (senhaCorreta) {
+                ViewBag.Message = "Usuário ok";
+                return View();
+            }
+            ViewBag.Erro = "Senha incorreta";
+        }
+```
+
+- Em nossa página de Login precisa exibir a mensagem pra gente debugar. Então: abaixo do formulário prinicpal, adicionar:
+
+```html
+    <div class="row">
+        <div class="col-md-12">
+            @ViewBag.Message
+            @ViewBag.Erro
+        </div>
+    </div>
+```
