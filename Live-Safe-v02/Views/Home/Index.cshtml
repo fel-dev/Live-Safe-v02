@@ -1,8 +1,46 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body>
+    <main>
+        <div class="caixa-pesquisa">
+            <h1 class="título" id="título-principal">Segurança para todos</h1>
+            <h2 class="subtitulo" id="subtitulo-principal">Verifique se seu e-mail ou telefone foi vazado</h2>
+            <form class="formulário" id="formulário-pesquisa">
+                <input type="text" id="pesquisa-campo" name="pesquisa" placeholder="E-mail, telefone e CPF">
+                <button id="submit-pesquisa">Verificar</button>
+            </form>
+            <div id="resultado">
+                <div id="resLeak" class="container"></div>
+                <div id="resOk" class="container"></div>
+                <div id="no-input" class="container"></div>
+            </div>
+        </div>
+        <div id="dicas" class="caixa-pesquisa div-video">
+            <section class="section-video">
+                <h2 class="título titulo-video">Dicas de segurança</h2>
+                <iframe class="Video" width=360" height="615" src="https://www.youtube.com/embed/QFdkggG34wo"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+            </section>
+            <section class="section-list">
+                <h2 id="subtitulo-Lista-de-dicas" class="título">Como proteger senhas nas redes sociais</h2>
+                <ol class="Lista-de-dicas">
+                    <li class="Lista-de-dicas-item">✔ Instale um antivirus deixe sempre atualizado</li>
+                    <li class="Lista-de-dicas-item">
+                        ✔ Configure opções de privacidade com poucas informações visiveis para pessoas que você não conhece
+                    </li>
+                    <li class="Lista-de-dicas-item">✔ Não preencha formularia com premios e dinheiro em troca de informações</li>
+                    <li class="Lista-de-dicas-item">
+                        ✔ Quando abrir um link em rede social, verifique que o dominio está correto, e não uma pagina falsa
+                    </li>
+                    <li class="Lista-de-dicas-item">✔ Não seguir pessoas desconhecidas e aceitar pessoas desconhecidas nas redes sociais</li>
+                    <li class="Lista-de-dicas-item">✔ Use senhas seguras com combinações de letras maiusculas e minusculas, caracteres e números</li>
+                    <li class="Lista-de-dicas-item">✔ Busque nas redes sociais informações sobre arquivos que considere suspeito</li>
+                </ol>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

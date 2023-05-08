@@ -4,9 +4,9 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Sign Up</h1>
+<h1 class="text-light font-weight-bold">Sign Up</h1>
 
-<h4>Criar sua conta</h4>
+<h4 class="text-light">Criar sua conta</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -42,9 +42,10 @@
     </div>
 </div>
 
-<div>
+<div class="text-white" >
     @*Apontar para Login*@
-    <a asp-action="Login">Já tem uma conta?</a>
+    <a class="text-light btn btn-primary" asp-action="Login">Já tem uma conta?</a>
+    
 </div>
 
 @section Scripts {

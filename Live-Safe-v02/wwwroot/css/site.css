@@ -1,71 +1,211 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+
+
+a.navbar- navbar-expand-sm {
+    background-color: blue;
+}
+
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    width: 170px;
+    left: 15px;
 }
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color: #006495;
+    padding-bottom: 70px;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+/* Main */
+.caixa-pesquisa {
+    box-shadow: 1px 1px 5px #13293D;
+    margin: 100px;
+    padding: 30px;
+    background-color: #13293D;
+    border-radius: 10px;
+}
+
+.título {
+    /* color: #F0F0F0; */
+    /* color: #1B98E0; */
+    color: #E8F1F2;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    font-weight: bold;
+    font-size: 52px;
+    text-shadow: 2px 2px 1px #1B98E0;
+    margin-bottom: 10px;
+}
+
+.Dicas-de-segurança {
+    align-items: center;
+}
+
+.caixa-pesquisa #subtitulo-principal {
+    text-align: center;
+    color: #1B98E0;
+    font-weight: bold;
+    font-size: 22px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#formulário-pesquisa {
+    text-align: center;
+}
+
+#pesquisa-campo {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    margin-top: 10px;
+    padding: 10px;
+    width: 300px;
+    background-color: #E8F1F2;
+    color: #1B98E0;
+    cursor: pointer;
+    transition: .5s;
+}
+
+::placeholder {
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+    color: #1B98E0;
+}
+
+#pesquisa-campo:hover {
+    transform: scale(1.02);
+}
+
+#submit-pesquisa {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-top: 10px;
+    padding: 10px;
+    width: 90px;
+    background-color: #1B98E0;
+    color: #E8F1F2;
+    cursor: pointer;
+    transition: .5s;
+}
+
+    #submit-pesquisa:hover {
+        transform: scale(1.1);
+        box-shadow: 1px 1px 10px gray;
+    }
+
+
+
+/* Dicas */
+
+.div-video {
+    text-align: justify;
+}
+
+#subtitulo-Lista-de-dicas, .titulo-video {
+    font-size: 32px;
+    border-bottom: solid 1px #1B98E0;
+}
+
+#dicas {
+    position: relative;
+    display: flex;
+}
+
+.section-video, .section-list {
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.section-video {
+    border-right: solid 1px #1B98E0;
+}
+
+iframe {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px #13293D;
+}
+
+.Lista-de-dicas-item {
+    color: #fff;
+    font-size: 16px;
+    padding-top: 25px;
+    display: inline-block;
+}
+
+footer {
+    background-color: #13293D;
+    padding-top: 5em;
+    padding-bottom: 10px;
+    border-top: 5px solid #247BA0;
 }
